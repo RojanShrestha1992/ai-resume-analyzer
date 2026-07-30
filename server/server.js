@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import resumeRoutes from "./src/routes/resumeRoutes.js";
 dotenv.config();
 connectDB();
 
@@ -21,6 +22,7 @@ app.use(
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/resume", resumeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
