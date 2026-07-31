@@ -4,6 +4,7 @@ import {
   getAllResumes,
   getResumeById,
   deleteResumeById,
+  analyzeResumeById,
 } from "../controllers/resumeController.js";
 import protect from "../middleware/authMiddleware.js";
 import upload from "../middleware/upload.js";
@@ -16,5 +17,6 @@ router.post("/upload", upload.single("resume"), uploadResume);
 router.get("/all", getAllResumes);
 router.get("/:id", getResumeById);
 router.delete("/:id", deleteResumeById);
+router.post("/:id/analyze", analyzeResumeById);
 
 export default router;
