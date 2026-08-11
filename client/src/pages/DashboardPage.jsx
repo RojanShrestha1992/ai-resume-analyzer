@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import Navbar from "../components/Navbar";
+import Spinner from "../components/Spinner";
+import StatusBadge from "../components/StatusBadge";
+
 const DashboardPage = () => {
   const [resumes, setResumes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,123 +33,138 @@ const DashboardPage = () => {
     try {
       await API.delete(`resume/${id}`);
       setResumes(resumes.filter((resume) => resume._id !== id));
-    } catch (err) {
+    } catch {
       setError("Failed to delete resume.");
     }
   };
-  const handleLogout = async () => {
-    try {
-      await API.post("/auth/logout");
-      navigate("/");
-    } catch (err) {
-      setError("Failed to logout.");
-    }
-  };
-  const getStatusBadge = (status) => {
-    const styles = {
-      pending:
-        "bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold",
-      processing:
-        "bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold",
-      completed:
-        "bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold",
-      failed:
-        "bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold",
-    };
-    return (
-      <span
-        className={`px-2 py-1 rounded-lg border text-xs font-medium ${styles[status]}`}
-      ></span>
-    );
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="h-8 w-8 rounded-full border-2 border-blue-500/20 border-t-blue-500 animate-spin"></div>
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <Spinner className="h-9 w-9" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-white">Resume Analyzer</h1>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/upload"
-              className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-500 transition"
-            >
-              + Upload Reusme
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-500 transition"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
 
-      {/* content */}
-
-      <div>
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         {error && (
-          <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-            {error}
+          <div className="mb-6 flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+            <span>⚠️</span>
+            <span>{error}</span>
           </div>
         )}
 
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Your Resumes
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            {resumes.length} {resumes.length === 1 ? "resume" : "resumes"}{" "}
+            uploaded
+          </p>
+        </div>
+
         {resumes.length === 0 ? (
-          <div className="text-center text-slate-400 mt-20">
-            <p className="text-slate-400 text-lg mb-4">No resumes found.</p>
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-20 text-center animate-fade-in">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8 text-indigo-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              No resumes yet
+            </h2>
+            <p className="mb-6 mt-1 text-sm text-slate-500">
+              Upload your first resume to get AI-powered feedback.
+            </p>
             <Link
-              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-500 transition"
               to="/upload"
+              className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500"
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
               Upload a resume
             </Link>
           </div>
         ) : (
-          <div>
-            {resumes.map((resume) => (
+          <div className="space-y-3">
+            {resumes.map((resume, index) => (
               <div
                 key={resume._id}
-                className="bg-slate-900/80 border border-slate-50 rounded-xl p-5 flex items-center justify-between gap-4 mb-4 hover:border-slate-700 transition"
+                className="flex animate-fade-in items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-indigo-200 hover:shadow-md"
+                style={{ animationDelay: `${Math.min(index * 60, 300)}ms` }}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-blue-600/20 flex items-center justify-center">
-                    <span>🧾</span>
+                <div className="flex min-w-0 items-center gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-500">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
                   </div>
-                  <div>
-                    <h3 className="text-white font-medium">
+                  <div className="min-w-0">
+                    <h3 className="truncate font-medium text-slate-900">
                       {resume.originalName}
                     </h3>
-                    <p className="text-sm text-slate-400">
-                      Uploaded on: {new Date(resume.createdAt).toLocaleString()}
+                    <p className="text-sm text-slate-500">
+                      Uploaded {new Date(resume.createdAt).toLocaleString()}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex shrink-0 items-center gap-4">
                   {resume.score !== null && resume.score !== undefined && (
-                    <span className="text-white font-bold">
-                      {resume.score}/100
+                    <span className="text-sm font-semibold text-slate-700">
+                      {resume.score}
+                      <span className="font-normal text-slate-400">/100</span>
                     </span>
                   )}
-                  {getStatusBadge(resume.analysisStatus)}
+                  <StatusBadge status={resume.analysisStatus} />
                   <Link
                     to={`/resume/${resume._id}`}
-                    className="text-blue-400 hover:text-blue-300 text-sm font-medium transition"
+                    className="text-sm font-medium text-indigo-600 transition hover:text-indigo-500"
                   >
                     View
                   </Link>
-
                   <button
                     onClick={() => handleDelete(resume._id)}
-                    className="text-red-400 hover:text-red-300 text-sm transition"
+                    className="text-sm font-medium text-slate-400 transition hover:text-rose-500"
                   >
                     Delete
                   </button>
@@ -155,7 +173,7 @@ const DashboardPage = () => {
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -29,30 +29,44 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-indigo-50 via-white to-violet-50 px-4">
+      {/* Decorative background */}
+      <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-indigo-300/30 blur-3xl" />
+      <div className="absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-violet-300/30 blur-3xl" />
+      <div className="absolute right-1/4 top-1/3 h-40 w-40 rounded-full bg-sky-200/40 blur-2xl" />
 
       {/* Login Card */}
-      <div className="relative w-full max-w-md">
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl p-8">
+      <div className="relative w-full max-w-md animate-slide-up">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="mx-auto mb-4 w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/30">
-              <span className="text-2xl">🔐</span>
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-indigo-500 to-violet-500 shadow-lg shadow-indigo-500/30">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
             </div>
-
-            <h1 className="text-3xl font-bold text-white">Welcome back</h1>
-
-            <p className="text-slate-400 mt-2 text-sm">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              Welcome back
+            </h1>
+            <p className="mt-1.5 text-sm text-slate-500">
               Sign in to continue to your account
             </p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-5 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-start gap-2">
+            <div className="mb-5 flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
               <span>⚠️</span>
               <span>{error}</span>
             </div>
@@ -62,30 +76,28 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">
                 Email address
               </label>
-
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-white placeholder-slate-500 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 required
               />
             </div>
 
             {/* Password */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-slate-300">
+              <div className="mb-1.5 flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-700">
                   Password
                 </label>
-
                 <Link
                   to="/forgot-password"
-                  className="text-xs text-blue-400 hover:text-blue-300 transition"
+                  className="text-xs font-medium text-indigo-600 transition hover:text-indigo-500"
                 >
                   Forgot password?
                 </Link>
@@ -97,14 +109,13 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 pr-12 text-white placeholder-slate-500 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 pr-12 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                   required
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
                 >
                   {showPassword ? "🙈" : "👁️"}
                 </button>
@@ -115,11 +126,11 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   Signing in...
                 </span>
               ) : (
@@ -128,28 +139,20 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-7">
-            <div className="h-px flex-1 bg-slate-800" />
-            <span className="text-xs text-slate-500">OR</span>
-            <div className="h-px flex-1 bg-slate-800" />
-          </div>
-
           {/* Register */}
-          <p className="text-center text-sm text-slate-400">
+          <p className="mt-6 text-center text-sm text-slate-500">
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="font-medium text-blue-400 hover:text-blue-300 transition"
+              className="font-medium text-indigo-600 transition hover:text-indigo-500"
             >
               Create one
             </Link>
           </p>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-slate-600 mt-6">
-          © 2026 Your App. All rights reserved.
+        <p className="mt-6 text-center text-xs text-slate-400">
+          © 2026 Resume Analyzer AI. All rights reserved.
         </p>
       </div>
     </div>
